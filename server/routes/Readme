@@ -1,0 +1,29 @@
+extractCity
+extract the data from the zameen.pk and save it to mongoose 
+
+localhost:5000/extractCity
+
+{
+"city":"Islamabad" it could be any city
+}
+-------------------------------------------------------------------------------
+getRent
+fetch the data from the mongoose
+localhost:5000/getRent
+
+{
+"city":"Islamabad" it could be any city
+}
+--------------------------------------------------------------------------------
+create-olx
+
+extract the data from the Olx website
+localhost:5000/create-olx
+{
+    "name":"mobile"
+}
+--------------------------------------------------------------------------------
+fetch-olx
+
+fetch the old product data from mongoose
+localhost:5000/fetch-olx
