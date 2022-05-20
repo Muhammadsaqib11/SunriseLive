@@ -8,6 +8,8 @@ const cookieparser = require("cookie-parser");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 
+
+
 const startServer = () => {
   app.use(cors({ origin: true }));
   app.use(bodyParser.urlencoded({ extended: true }));
