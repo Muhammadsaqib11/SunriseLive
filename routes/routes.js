@@ -26,9 +26,6 @@ const inventory = require("../controller/inventory_controller");
 const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
-
-
-
 const categoryObj = require("../controller/category_controller");
 
 
