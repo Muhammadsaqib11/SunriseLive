@@ -23,9 +23,12 @@ const inspectionTest = require("../controller/inspection_test_controller");
 const inspectionResults = require("../controller/inspection_result_controller");
 const vehiclePart = require("../controller/vehicle_part_controller");
 const inventory = require("../controller/inventory_controller");
-// const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
+const aaVehiclesParts = require("../controller/aavehiclesarts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
+
+
+
 const categoryObj = require("../controller/category_controller");
 
 
@@ -161,45 +164,45 @@ const routes = {
   "/getCabinetById": (req, res) => {
     vehicle.getCabinetById(req, res);
   },
-  // "/addIdentifiedParts": (req, res) => {
-  //   aaVehiclesParts.addIdentifiedParts(req, res);
-  // },
-  // "/addIdentifiedPartImages": (req, res) => {
-  //   aaVehiclesParts.addIdentifiedPartImages(req, res);
-  // },
-  // "/getAAVehiclesParts": (req, res) => {
-  //   aaVehiclesParts.getAAVehiclesParts(req, res);
-  // },
-  // "/getAAVehiclesPartsById": (req, res) => {
-  //   aaVehiclesParts.getAAVehiclesPartsById(req, res);
-  // },
-  // "/getAAPartById": (req, res) => {
-  //   aaVehiclesParts.getAAPartById(req, res);
-  // },
-  // "/updateAAPartStatusById": (req, res) => {
-  //   aaVehiclesParts.updateAAPartStatus(req, res);
-  // },
-  // "/updateAAPartSalePriceById": (req, res) => {
-  //   aaVehiclesParts.updateAAPartSalePriceById(req, res);
-  // },
-  // "/updateAAPartCabinet": (req, res) => {
-  //   aaVehiclesParts.updateAAPartCabinet(req, res);
-  // },
-  // "/updateAAPartSubBin": (req, res) => {
-  //   aaVehiclesParts.updateAAPartSubBin(req, res);
-  // },
-  // "/getAAPartsBySubBinId": (req, res) => {
-  //   aaVehiclesParts.getAAPartsBySubBinId(req, res);
-  // },
-  // "/updateAAPartImage": (req, res) => {
-  //   aaVehiclesParts.updateAAPartImage(req, res);
-  // },
-  // "/deleteAAPartById": (req, res) => {
-  //   aaVehiclesParts.deleteAAPartById(req, res);
-  // },
-  // "/deleteAAPartImage": (req, res) => {
-  //   aaVehiclesParts.deleteAAPartImage(req, res);
-  // },
+  "/addIdentifiedParts": (req, res) => {
+    aaVehiclesParts.addIdentifiedParts(req, res);
+  },
+  "/addIdentifiedPartImages": (req, res) => {
+    aaVehiclesParts.addIdentifiedPartImages(req, res);
+  },
+  "/getAAVehiclesParts": (req, res) => {
+    aaVehiclesParts.getAAVehiclesParts(req, res);
+  },
+  "/getAAVehiclesPartsById": (req, res) => {
+    aaVehiclesParts.getAAVehiclesPartsById(req, res);
+  },
+  "/getAAPartById": (req, res) => {
+    aaVehiclesParts.getAAPartById(req, res);
+  },
+  "/updateAAPartStatusById": (req, res) => {
+    aaVehiclesParts.updateAAPartStatus(req, res);
+  },
+  "/updateAAPartSalePriceById": (req, res) => {
+    aaVehiclesParts.updateAAPartSalePriceById(req, res);
+  },
+  "/updateAAPartCabinet": (req, res) => {
+    aaVehiclesParts.updateAAPartCabinet(req, res);
+  },
+  "/updateAAPartSubBin": (req, res) => {
+    aaVehiclesParts.updateAAPartSubBin(req, res);
+  },
+  "/getAAPartsBySubBinId": (req, res) => {
+    aaVehiclesParts.getAAPartsBySubBinId(req, res);
+  },
+  "/updateAAPartImage": (req, res) => {
+    aaVehiclesParts.updateAAPartImage(req, res);
+  },
+  "/deleteAAPartById": (req, res) => {
+    aaVehiclesParts.deleteAAPartById(req, res);
+  },
+  "/deleteAAPartImage": (req, res) => {
+    aaVehiclesParts.deleteAAPartImage(req, res);
+  },
   "/addProductImage": (req, res) => {
     products.addProductImage(req, res);
   },
