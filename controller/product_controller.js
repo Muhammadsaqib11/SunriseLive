@@ -1,18 +1,58 @@
 const Product = require("../models/product");
+const fs = require("fs");
 
 const product = {
     // addNewcustomer
   addNewProduct: (req, res) => {
     // const displayName = `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`;
-    console.log("req", req.body)
+    // console.log("req", req.body)
+    const variants = req.body.variants;
+    delete req.body.variants
+    variants.forEach((item,i) => {
+      let Data = {...req.body,...item,productName:item.Name}
+      console.log(Data);
+      const product = new Product(Data);
+      product.save((err, user) => {
+        if(err) return res.status(400).json({error:true,message:err.message})
+        if(i === variants.length-1){
 
-    const product = new Product({ ...req.body });
-    product.save((err, user) => {
-      if (!err) {
-        console.log(user);
-        res.send([user]);
-      }
+          if (!err) {
+            console.log(user);
+            res.send([user]);
+          }
+        }
+      });
+
+      
     });
+  },
+
+  addProductImage: (req, res) => {
+
+    // console.log("req", req)
+    let mdata = req.files === null ? null : req.files.file.data;
+    console.log(req.files)
+    console.log(req.files.file.mimetype.split("/")[1]);
+    // console.log(mdata)
+    if (mdata !== null) {
+      let buff = new Buffer.from(req.files.file.data, "base64");
+
+      fs.writeFile(
+        `public/product/${req.files.file.name}`,
+        buff,
+        function (err) {
+          if (err) {
+            res.send(err);
+          } else {
+            console.log("success")
+            res.json({ success: true });
+          }
+        }
+      );
+    }
+    if (mdata === null) {
+      res.json({ success: false, message: "no image file to Save" });
+    }
   },
 
   getProduct: (req, res) => {
@@ -63,6 +103,10 @@ const product = {
       .sort({ $natural: -1 })
       .skip(skip)
       .limit(size)
+      .populate(
+        "location_id",
+        "country address state city "
+      )
       .exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({ doc: doc, totalDoc: count });

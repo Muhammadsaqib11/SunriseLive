@@ -15,7 +15,7 @@ const vendorSchema = new mongoose.Schema({
     website: String,
     contactfax: String,
     orderEmail: String,
-    imageName:[],
+    vengorImage:String,
     time_tracks: Array
 });
 

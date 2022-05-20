@@ -56,12 +56,15 @@ const shelfs = {
         })
     },
     getAllShelfs: (req, res) => {
-        let limit = req.query.limit || 10
+        const pageNo = parseInt(req.query.page);
+    const size = parseInt(req.query.limit);
+    const skip = size * pageNo;
         let count =  0;
         Shelfs.countDocuments({},function(err,doc){count=doc})
         Shelfs.find({})
         .sort({ $natural: -1 })
-        .limit(limit)
+        .skip(skip)
+        .limit(size)
         .populate({
             path: 'rack_id',
             select:'no',

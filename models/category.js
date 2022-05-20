@@ -4,7 +4,7 @@ const categorySchema = new mongoose.Schema({
   categoryName: String,
   categoryDescription: String,
   parentCategory: String,
-  imageName:[],
+  categoryImage:String,
   time_tracks: Array
 });
 

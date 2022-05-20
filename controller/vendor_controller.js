@@ -1,4 +1,5 @@
 const Vendor = require("../models/vendor");
+const fs = require("fs");
 
 const vendor = {
     // addNewcustomer
@@ -13,6 +14,33 @@ const vendor = {
         res.send([user]);
       }
     });
+  },
+
+  addVendorImage: (req, res) => {
+    // console.log("req", req)
+    let mdata = req.files === null ? null : req.files.file.data;
+    console.log(req.files)
+    console.log(req.files.file.mimetype.split("/")[1]);
+    // console.log(mdata)
+    if (mdata !== null) {
+      let buff = new Buffer.from(req.files.file.data, "base64");
+
+      fs.writeFile(
+        `public/vendor/${req.files.file.name}`,
+        buff,
+        function (err) {
+          if (err) {
+            res.send(err);
+          } else {
+            console.log("success")
+            res.json({ success: true });
+          }
+        }
+      );
+    }
+    if (mdata === null) {
+      res.json({ success: false, message: "no image file to Save" });
+    }
   },
 
   getCustomer: (req, res) => {

@@ -23,14 +23,13 @@ const inspectionTest = require("../controller/inspection_test_controller");
 const inspectionResults = require("../controller/inspection_result_controller");
 const vehiclePart = require("../controller/vehicle_part_controller");
 const inventory = require("../controller/inventory_controller");
-const aaVehiclesParts = require("../controller/aaVehiclesParts_Controller");
+const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
 
 
 
 const categoryObj = require("../controller/category_controller");
-
 
 
 const axios = require("axios");
@@ -49,7 +48,7 @@ const bins = require("../controller/bins_controller");
 const subBins = require("../controller/subBins_controller");
 const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller");
 const orders = require("../controller/getOrdersList_Controller")
-const products = require("../controller/product_controller")
+const products = require("../controller/Product_Controller")
 
 // const CompanyInfo = require("../models/company-info-");
 var router = express.Router();
@@ -108,9 +107,20 @@ const routes = {
   "/createVendor": (req, res) => {
     vendor.addNewuVendor(req, res);
   },
+
+  "/addVendorImage": (req, res) => {
+    vendor.addVendorImage(req, res);
+  },
+
+  
   "/createCategory": (req, res) => {
     categoryObj.addNewCategory(req, res);
   },
+  "/addCategoryImage": (req, res) => {
+    categoryObj.addCategoryImage(req, res);
+  },
+
+  
   "/createVehicle": (req, res) => {
     vehicle.addNewvehicle(req, res);
   },
@@ -193,8 +203,16 @@ const routes = {
   "/deleteAAPartImage": (req, res) => {
     aaVehiclesParts.deleteAAPartImage(req, res);
   },
+  "/addProductImage": (req, res) => {
+    products.addProductImage(req, res);
+  },
   "/createProducts": (req, res) => {
     products.addNewProduct(req, res);
+  },
+
+
+  "/getAllProducts": (req, res) => {
+    products.getAllProducts(req, res);
   },
   "/getOrdersList": (req, res) => {
     orders.GetOrders(req, res);
