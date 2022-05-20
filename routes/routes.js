@@ -48,7 +48,7 @@ const bins = require("../controller/bins_controller");
 const subBins = require("../controller/subBins_controller");
 const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller");
 const orders = require("../controller/getOrdersList_Controller")
-const products = require("../controller/Product_Controller")
+const products = require("../controller/product_Controller")
 
 // const CompanyInfo = require("../models/company-info-");
 var router = express.Router();
