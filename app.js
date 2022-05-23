@@ -5,14 +5,22 @@ const path = require("path");
 const router = require("./routes/routes");
 const bodyParser = require("body-parser");
 const cookieparser = require("cookie-parser");
+const fs = require('fs')
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
-
-
 
 const startServer = () => {
   app.use(cors({ origin: true }));
   app.use(bodyParser.urlencoded({ extended: true }));
+  // var bodyParser = require('body-parser');
+  // app.use(bodyParser.json({ limit: "50mb" }));
+  // app.use(
+  //   bodyParser.urlencoded({
+  //     limit: "50mb",
+  //     extended: true,
+  //     parameterLimit: 50000,
+  //   })
+  // );
   app.use(express.static("public"));
 
   app.use(express.static(path.join(__dirname, "./build")));

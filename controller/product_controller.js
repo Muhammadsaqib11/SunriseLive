@@ -1,8 +1,23 @@
 const Product = require("../models/product");
-const fs = require("fs");
+const mongoose = require('mongoose')
+var XLSX = require('xlsx')
+const fs = require('fs')
+const path = require('path');
+const notes = './public/ex.xlsx';
+path.dirname(notes);
+path.basename(notes);
+path.extname(notes);
+
+// var workbook = XLSX.readFile(notes);
+// var sheet_name_list = workbook.SheetNames;
+// var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+// console.log(xlData);
+
+// Product.insertMany(xlData)
 
 const product = {
-    // addNewcustomer
+
+  // addNewcustomer
   addNewProduct: (req, res) => {
     // const displayName = `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`;
     // console.log("req", req.body)
@@ -113,7 +128,7 @@ const product = {
         // console.log(doc);
       });
   },
-  
+
   updateProductById: (req, res) => {
     const data = {
       email: req.body.email,

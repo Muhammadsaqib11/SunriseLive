@@ -1,11 +1,16 @@
 const mongoose = require("../config/config");
 
 const productSchema = new mongoose.Schema({
-    productName: String,
+    ID: String,
+    ProductName: String,
     productDescription: String,
+    ProductCategories: String,
+    VariantName: String,
     productimageName:String,
-    productCategoty: String,
     variants: [],
+    Barcode: String,
+    CurrentSHMDefaultCost: String,
+    CurrentSHMQuantity: String,
     width: String,
     length: String,
     height: String,
@@ -14,12 +19,9 @@ const productSchema = new mongoose.Schema({
     weightValue: String,
     weightUnit: String,
     time_tracks: Array,
-    Sku:String,
-    Barcode:String,
+    SKU:String,
     Price:String,
-    Cost:String,
     parl:String,
-    recordQty:String,
     location_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Locations",

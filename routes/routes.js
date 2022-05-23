@@ -23,14 +23,11 @@ const inspectionTest = require("../controller/inspection_test_controller");
 const inspectionResults = require("../controller/inspection_result_controller");
 const vehiclePart = require("../controller/vehicle_part_controller");
 const inventory = require("../controller/inventory_controller");
-const aaVehiclesParts = require("../controller/aavehiclesarts_controller");
+const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
 
-
-
 const categoryObj = require("../controller/category_controller");
-
 
 const axios = require("axios");
 // const upload = require("../helper/helper");
@@ -47,8 +44,8 @@ const shelfs = require("../controller/shelfs_controller");
 const bins = require("../controller/bins_controller");
 const subBins = require("../controller/subBins_controller");
 const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller");
-const orders = require("../controller/getOrdersList_Controller")
-const products = require("../controller/product_controller")
+const orders = require("../controller/getOrdersList_Controller");
+const products = require("../controller/Product_Controller");
 
 // const CompanyInfo = require("../models/company-info-");
 var router = express.Router();
@@ -209,8 +206,9 @@ const routes = {
   "/createProducts": (req, res) => {
     products.addNewProduct(req, res);
   },
-
-
+  "/bulkUpdate": (req, res) => {
+    products.bulkUpload(req, res);
+  },
   "/getAllProducts": (req, res) => {
     products.getAllProducts(req, res);
   },
@@ -459,7 +457,6 @@ const routes = {
     aaVehiclesParts.getAAPartAddressById(req, res);
   },
 
-  
   // Warehouses ................
   "/addNewWarehouse": (req, res) => {
     warehouse.addNewWarehouse(req, res);
