@@ -23,7 +23,7 @@ const inspectionTest = require("../controller/inspection_test_controller");
 const inspectionResults = require("../controller/inspection_result_controller");
 const vehiclePart = require("../controller/vehicle_part_controller");
 const inventory = require("../controller/inventory_controller");
-// const aaVehiclesParts = require("../controller/aavehiclesparts_controller");
+const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
 
