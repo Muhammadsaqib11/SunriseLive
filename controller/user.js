@@ -16,7 +16,7 @@ const user = {
   login: (req, res) => {
     console.log(req.body);
     User.findOne({ email: req.body.email })
-      .populate("locations", "country state city")
+      .populate("locations","country state city")
       .exec((err, user) => {
         if (!err) {
           if(!user) return res.json({isAuth: false, message: "email"})

@@ -1,9 +1,9 @@
 const Product = require("../models/product");
-const mongoose = require('mongoose')
-var XLSX = require('xlsx')
-const fs = require('fs')
-const path = require('path');
-const notes = './public/ex.xlsx';
+const mongoose = require("mongoose");
+var XLSX = require("xlsx");
+const fs = require("fs");
+const path = require("path");
+const notes = "./public/test.xlsx";
 path.dirname(notes);
 path.basename(notes);
 path.extname(notes);
@@ -16,37 +16,33 @@ path.extname(notes);
 // Product.insertMany(xlData)
 
 const product = {
-
   // addNewcustomer
   addNewProduct: (req, res) => {
     // const displayName = `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`;
     // console.log("req", req.body)
     const variants = req.body.variants;
-    delete req.body.variants
-    variants.forEach((item,i) => {
-      let Data = {...req.body,...item,productName:item.Name}
+    delete req.body.variants;
+    variants.forEach((item, i) => {
+      let Data = { ...req.body, ...item, productName: item.Name };
       console.log(Data);
       const product = new Product(Data);
       product.save((err, user) => {
-        if(err) return res.status(400).json({error:true,message:err.message})
-        if(i === variants.length-1){
-
+        if (err)
+          return res.status(400).json({ error: true, message: err.message });
+        if (i === variants.length - 1) {
           if (!err) {
             console.log(user);
             res.send([user]);
           }
         }
       });
-
-      
     });
   },
 
   addProductImage: (req, res) => {
-
     // console.log("req", req)
     let mdata = req.files === null ? null : req.files.file.data;
-    console.log(req.files)
+    console.log(req.files);
     console.log(req.files.file.mimetype.split("/")[1]);
     // console.log(mdata)
     if (mdata !== null) {
@@ -59,11 +55,43 @@ const product = {
           if (err) {
             res.send(err);
           } else {
-            console.log("success")
+            console.log("success");
             res.json({ success: true });
           }
         }
       );
+    }
+    if (mdata === null) {
+      res.json({ success: false, message: "no image file to Save" });
+    }
+  },
+
+  bulkUpload: (req, res) => {
+    // console.log("req", req)
+    let mdata = req.files === null ? null : req.files.file.data;
+    console.log(req.files);
+    console.log(req.files.file.mimetype.split("/")[1]);
+    // console.log(mdata)
+    if (mdata !== null) {
+      let buff = new Buffer.from(req.files.file.data, "base64");
+
+      fs.writeFile(`public/test.xlsx`, buff, function (err) {
+        if (err) {
+          res.send(err);
+        } else {
+          var workbook = XLSX.readFile(notes);
+          var sheet_name_list = workbook.SheetNames;
+          var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+          console.log(xlData);
+
+          Product.insertMany(xlData, {ordered: false, upsert: true}).catch(err=>{
+            console.error(err);
+        })
+
+          console.log("success");
+          res.json({ success: true });
+        }
+      });
     }
     if (mdata === null) {
       res.json({ success: false, message: "no image file to Save" });
@@ -98,33 +126,33 @@ const product = {
     );
   },
 
-  getAllProducts: (req, res) => {
+  getAllProducts: async (req, res) => {
     const pageNo = parseInt(req.query.page);
     const size = parseInt(req.query.limit);
+    
     const skip = size * pageNo;
+    // console.log("size", size, skip)
     let count = 0;
 
-    Product.countDocuments({}, function (err, docCount) {
+   await Product.countDocuments({}, function (err, docCount) {
       if (err) {
         return handleError(err);
       } //handle possible errors
-      console.log("docCount", docCount);
+      // console.log("docCount", docCount);
       count = docCount;
       //and do some other fancy stuff
     });
 
-    Product.find()
+   await Product.find()
       // .sort({_id: order})
       .sort({ $natural: -1 })
       .skip(skip)
       .limit(size)
-      .populate(
-        "location_id",
-        "country address state city "
-      )
+      .populate("location_id", "country address state city ")
       .exec((err, doc) => {
+        console.log("doc", count)
         if (err) return res.status(400).send(err);
-        res.json({ doc: doc, totalDoc: count });
+        res.json({ success:true ,doc: doc, totalDoc: count });
         // console.log(doc);
       });
   },
