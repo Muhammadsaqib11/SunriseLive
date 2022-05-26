@@ -206,6 +206,11 @@ const routes = {
   "/createProducts": (req, res) => {
     products.addNewProduct(req, res);
   },
+  "/UpdateProductQuantity": (req, res) => {
+    products.UpdateProductQuantity(req, res);
+  },
+
+  
   "/bulkUpload": (req, res) => {
     products.bulkUpload(req, res);
   },

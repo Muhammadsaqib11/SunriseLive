@@ -39,6 +39,23 @@ const product = {
     });
   },
 
+  UpdateProductQuantity: (req, res) => {
+  
+    const updatedCost = req.body.updateProduct;
+    console.log(updatedCost)
+    updatedCost.forEach((item, i) => {
+      Product.findByIdAndUpdate(item._id, { CurrentSHMQuantity: item.quantity }, (err, doc) => {
+        if (err)
+            return res.status(400).json({ error: true, message: err.message });
+      if (i === updatedCost.length - 1) {
+        if (!err) {
+          res.json({ success: true, message:" Update Quantity Successfully" });
+        }
+      }
+      });
+    });
+  },
+
   addProductImage: (req, res) => {
     // console.log("req", req)
     let mdata = req.files === null ? null : req.files.file.data;
