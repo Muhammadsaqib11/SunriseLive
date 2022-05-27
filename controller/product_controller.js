@@ -55,6 +55,26 @@ const product = {
       });
     });
   },
+  AddProductQuantity: (req, res) => {
+  
+    const AddedQuantity = req.body.addProductQuantity;
+    console.log(AddedQuantity)
+    AddedQuantity.forEach((item, i) => {
+      Product.findByIdAndUpdate(item._id, { CurrentSHMQuantity: item.quantity }, (err, doc) => {
+        if (err)
+            return res.status(400).json({ error: true, message: err.message });
+      if (i === AddedQuantity.length - 1) {
+        if (!err) {
+          res.json({ success: true, message:" Added Quantity Successfully" });
+        }
+      }
+      });
+    });
+  },
+
+
+
+  
 
   addProductImage: (req, res) => {
     // console.log("req", req)

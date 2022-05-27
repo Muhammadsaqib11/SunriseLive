@@ -209,6 +209,9 @@ const routes = {
   "/UpdateProductQuantity": (req, res) => {
     products.UpdateProductQuantity(req, res);
   },
+  "/AddProductQuantity": (req, res) => {
+    products.AddProductQuantity(req, res);
+  },
 
   
   "/bulkUpload": (req, res) => {
