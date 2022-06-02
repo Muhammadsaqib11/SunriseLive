@@ -2,6 +2,9 @@
     "name": "guiderapp",
     "version": "0.0.0",
     "private": true,
+    "engines": {
+        "node": "16.9.1"
+      },
     "scripts": {
         "start": "nodemon index.js"
     },
