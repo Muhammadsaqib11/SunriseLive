@@ -1,6 +1,85 @@
 const User = require("../models/user");
 const bycrpt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
+const login =async (req, res)=>{
+  console.log(req.body);
+  var email = req.body.email;
+  var password = req.body.password;
+  await User.findOne({ email: req.body.email })
+  .then(function(user) {
+    console.log("user", user)
+      if(user){
+        bycrpt.compare(password, user.password).then(function (passcheck) {
+            console.log("passcheck", passcheck)
+              if(passcheck){
+                  var jwtUser = {
+                      email: user.email,
+                      // name: user.name,
+                      // score: user.score,
+                      // accesslevel: "all"
+                  };
+
+                  var token = jwt.sign(jwtUser,"secret_this_should_be_longer", {
+                      expiresIn: 1440 
+                      //expires in 24 hours
+                  });
+
+                  res.status(200).json({
+                    success: true,
+                    message: 'Here´s your token.',
+                    token: token, 
+                    email:user.email,
+                    firstName:user.firstName,
+                    status:user.status
+                     });
+                  /*
+                  var resp = {success: true, message: 'Heres your token.', token: token};
+                  response.write(JSON.stringify(resp));
+                  */
+              }else{
+                  res.status(401).json({
+                      success: false,
+                      message: 'Authentification failed. Password or email wrong'
+                  });
+              }
+          });
+      }else{
+          res.status(401).send({
+              success: false,
+              message: 'Authentification failed.'
+          });
+      }
+  })
+  // User.findOne({ email: req.body.email })
+  //   .populate("locations","country state city")
+  //   .exec((err, user) => {
+  //     if (!err) {
+  //       if(!user) return res.json({isAuth: false, message: "email"}).T
+
+
+     
+
+  //       user.comparePassword(req.body.password, (err, isMatch) => {
+  //         if (!isMatch) {
+  //           return res.json({
+  //             isAuth: false,
+  //             message: "password",
+  //           });
+  //         }
+  //         user.generateToken((err, user) => {
+  //           // const accessToken = jwt.sign({ userId: user.id }, {
+  //           //   expiresIn: '2h'
+  //           // });
+  //           // user.token = accessToken;
+  //           // console.log("accessToken", accessToken)
+  //           // console.log(user.token);
+  //           if (!err) res.cookie("auth", user.token).json({isAuth:true,message:'',user});
+  //         });
+  //       });
+  //     }
+  //   });
+}
 const user = {
   register: (req, res) => {
     console.log(req.body);
@@ -13,31 +92,84 @@ const user = {
       }
     });
   },
-  login: (req, res) => {
-    console.log(req.body);
-    User.findOne({ email: req.body.email })
-      .populate("locations","country state city")
-      .exec((err, user) => {
-        if (!err) {
-          if(!user) return res.json({isAuth: false, message: "email"})
+  login:  async (req, res) => {
+    console.log("req", req.body);
+    var email = req.body.email;
+    var password = req.body.password;
 
-          // const accessToken = jwt.sign({ userId: user.id }, JWT_SECRET, {
-          //   expiresIn: JWT_EXPIRES_IN
-          // });
-          user.comparePassword(req.body.password, (err, isMatch) => {
-            if (!isMatch) {
-              return res.json({
-                isAuth: false,
-                message: "password",
-              });
-            }
-            user.generateToken((err, user) => {
-              // console.log(user.token);
-              if (!err) res.cookie("auth", user.token).json({isAuth:true,message:'',user});
+  await User.findOne({ email: req.body.email })
+    .then(function (user) {
+      console.log("user", user)
+        if(user){
+          bycrpt.compare(password, user.password).then(function (passcheck) {
+              console.log("passcheck", passcheck)
+                if(passcheck){
+                    var jwtUser = {
+                        email: user.email,
+                        // name: user.name,
+                        // score: user.score,
+                        // accesslevel: "all"
+                    };
+
+                    var token = jwt.sign(jwtUser,"secret_this_should_be_longer", {
+                        expiresIn: 1440 
+                        //expires in 24 hours
+                    });
+
+                    res.status(200).json({
+                      success: true,
+                      message: 'Here´s your token.',
+                      token: token, 
+                      email:user.email,
+                      firstName:user.firstName,
+                      status:user.status
+                       });
+                    /*
+                    var resp = {success: true, message: 'Heres your token.', token: token};
+                    response.write(JSON.stringify(resp));
+                    */
+                }else{
+                    res.status(401).json({
+                        success: false,
+                        message: 'Authentification failed. Password or email wrong'
+                    });
+                }
             });
-          });
+        }else{
+            res.status(401).send({
+                success: false,
+                message: 'Authentification failed.'
+            });
         }
-      });
+    })
+    // User.findOne({ email: req.body.email })
+    //   .populate("locations","country state city")
+    //   .exec((err, user) => {
+    //     if (!err) {
+    //       if(!user) return res.json({isAuth: false, message: "email"}).T
+
+
+       
+
+    //       user.comparePassword(req.body.password, (err, isMatch) => {
+    //         if (!isMatch) {
+    //           return res.json({
+    //             isAuth: false,
+    //             message: "password",
+    //           });
+    //         }
+    //         user.generateToken((err, user) => {
+    //           // const accessToken = jwt.sign({ userId: user.id }, {
+    //           //   expiresIn: '2h'
+    //           // });
+    //           // user.token = accessToken;
+    //           // console.log("accessToken", accessToken)
+    //           // console.log(user.token);
+    //           if (!err) res.cookie("auth", user.token).json({isAuth:true,message:'',user});
+    //         });
+    //       });
+    //     }
+    //   });
   },
   fetchMechanic: (req, res) => {
     User.find({ $and: [{ userType: "Mechanic" }] }).exec((err, doc) => {
@@ -108,4 +240,4 @@ const user = {
   },
 };
 
-module.exports = user;
+module.exports =user;

@@ -1,7 +1,7 @@
 const mongoose = require("../config/config");
 
 const productSchema = new mongoose.Schema({
-  ID: { type: String, unique: true},
+  ID: { type: String, unique: true },
   ProductName: String,
   productDescription: String,
   ProductCategories: String,

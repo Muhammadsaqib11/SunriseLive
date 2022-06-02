@@ -8,6 +8,9 @@ const cookieparser = require("cookie-parser");
 const fs = require('fs')
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
+const auth = require("./middleware/auth")
+
+const user = require('./controller/user')
 
 const startServer = () => {
   app.use(cors({ origin: true }));
@@ -28,8 +31,10 @@ const startServer = () => {
     res.sendFile(path.join(__dirname, "./build"));
   });
 
+
   app.use(express.json());
   app.use(fileUpload({ createParentPath: true }));
+  app.post('/login',user.login)
 
   app.use(router);
   var port = process.env.PORT || 3001;

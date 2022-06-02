@@ -1,5 +1,7 @@
 var express = require("express");
 const user = require("../controller/user");
+const auth = require('../middleware/auth')
+
 const locations = require("../controller/locations_controller");
 const schedule = require("../controller/schedule_controller");
 const customer = require("../controller/customer_controller");
@@ -109,7 +111,6 @@ const routes = {
     vendor.addVendorImage(req, res);
   },
 
-  
   "/createCategory": (req, res) => {
     categoryObj.addNewCategory(req, res);
   },
@@ -117,7 +118,6 @@ const routes = {
     categoryObj.addCategoryImage(req, res);
   },
 
-  
   "/createVehicle": (req, res) => {
     vehicle.addNewvehicle(req, res);
   },
@@ -212,13 +212,19 @@ const routes = {
   "/AddProductQuantity": (req, res) => {
     products.AddProductQuantity(req, res);
   },
+  "/AppMiddleWareCheck": (req, res ) => {
+    products.AppMiddleWareCheck(req, res);
+  },
 
-  
+
   "/bulkUpload": (req, res) => {
     products.bulkUpload(req, res);
   },
   "/getAllProducts": (req, res) => {
     products.getAllProducts(req, res);
+  },
+  "/updateProductById": (req, res) => {
+    products.updateProductById(req, res);
   },
   "/getOrdersList": (req, res) => {
     orders.GetOrders(req, res);
@@ -543,14 +549,13 @@ const routes = {
   "/test": (req, res) => {},
 };
 
-router.use("/", function (req, res) {
-  if (routes[req.path] == undefined) {
-    console.log(req.path);
-  } else {
-    const path = req.path;
-    console.log(req.path);
-    routes[path](req, res);
-  }
-});
+  router.use("/", auth,( req, res)=> {
+    if (routes[req.path] == undefined) {
+      console.log(req.path);
+    } else {
+      const path = req.path;  
+      routes[path](req, res);
+    }
+  });
 
 module.exports = router;

@@ -7,6 +7,9 @@ const notes = "./public/test.xlsx";
 path.dirname(notes);
 path.basename(notes);
 path.extname(notes);
+const auth = require('../middleware/auth')
+var { nanoid } = require("nanoid");
+
 
 // var workbook = XLSX.readFile(notes);
 // var sheet_name_list = workbook.SheetNames;
@@ -22,8 +25,11 @@ const product = {
     // console.log("req", req.body)
     const variants = req.body.variants;
     delete req.body.variants;
+    const ID = nanoid()
+    console.log(ID)
+
     variants.forEach((item, i) => {
-      let Data = { ...req.body, ...item, productName: item.Name };
+      let Data = { ...req.body, ...item, productName: item.Name , ID:ID };
       console.log(Data);
       const product = new Product(Data);
       product.save((err, user) => {
@@ -31,7 +37,7 @@ const product = {
           return res.status(400).json({ error: true, message: err.message });
         if (i === variants.length - 1) {
           if (!err) {
-            console.log(user);
+            // console.log(user);
             res.send([user]);
           }
         }
@@ -40,7 +46,6 @@ const product = {
   },
 
   UpdateProductQuantity: (req, res) => {
-  
     const updatedCost = req.body.updateProduct;
     console.log(updatedCost)
     updatedCost.forEach((item, i) => {
@@ -56,7 +61,6 @@ const product = {
     });
   },
   AddProductQuantity: (req, res) => {
-  
     const AddedQuantity = req.body.addProductQuantity;
     console.log(AddedQuantity)
     AddedQuantity.forEach((item, i) => {
@@ -73,8 +77,10 @@ const product = {
   },
 
 
+  AppMiddleWareCheck: (req, res ) => {
+      res.status(200).json("Welcome 🙌 ");
+  },
 
-  
 
   addProductImage: (req, res) => {
     // console.log("req", req)
@@ -118,12 +124,16 @@ const product = {
         } else {
           var workbook = XLSX.readFile(notes);
           var sheet_name_list = workbook.SheetNames;
-          var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+          var xlData = XLSX.utils.sheet_to_json(
+            workbook.Sheets[sheet_name_list[0]]
+          );
           console.log(xlData);
 
-          Product.insertMany(xlData, {ordered: false, upsert: true}).catch(err=>{
-            console.error(err);
-        })
+          Product.insertMany(xlData, { ordered: false, upsert: true }).catch(
+            (err) => {
+              console.error(err);
+            }
+          );
 
           console.log("success");
           res.json({ success: true });
@@ -164,14 +174,15 @@ const product = {
   },
 
   getAllProducts: async (req, res) => {
+    // console.log(req)
     const pageNo = parseInt(req.query.page);
     const size = parseInt(req.query.limit);
-    
+
     const skip = size * pageNo;
     // console.log("size", size, skip)
     let count = 0;
 
-   await Product.countDocuments({}, function (err, docCount) {
+    await Product.countDocuments({}, function (err, docCount) {
       if (err) {
         return handleError(err);
       } //handle possible errors
@@ -180,36 +191,38 @@ const product = {
       //and do some other fancy stuff
     });
 
-   await Product.find()
+    await Product.find()
       // .sort({_id: order})
       .sort({ $natural: -1 })
       .skip(skip)
       .limit(size)
       .populate("location_id", "country address state city ")
       .exec((err, doc) => {
-        console.log("doc", count)
+        console.log("doc", count);
         if (err) return res.status(400).send(err);
-        res.json({ success:true ,doc: doc, totalDoc: count });
+        res.json({ success: true, doc: doc, totalDoc: count });
         // console.log(doc);
       });
   },
-
   updateProductById: (req, res) => {
+    console.log("req body", req.body);
+
     const data = {
-      email: req.body.email,
-      titleName: req.body.titleName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      displayName: `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`,
-      country: req.body.country,
-      state: req.body.state,
-      city: req.body.city,
-      county: req.body.county,
-      street: req.body.street,
-      zipCode: req.body.zipCode,
-      homePhone: req.body.homePhone,
-      workPhone: req.body.workPhone,
-      cellNumber: req.body.cellNumber,
+      ProductName: req.body.ProductName,
+      productDescription: req.body.productDescription,
+      category: req.body.category,
+      width: req.body.width,
+      length: req.body.length,
+      height: req.body.height,
+      unit: req.body.unit,
+      weightValue: req.body.weightValue,
+      SKU: req.body.variants[0].SKU,
+      Barcode: req.body.variants[0].Barcode,
+      Price: req.body.variants[0].Price,
+      CurrentSHMDefaultCost: req.body.variants[0].CurrentSHMDefaultCost,
+      parl: req.body.variants[0].parl,
+      CurrentSHMQuantity: req.body.variants[0].CurrentSHMQuantity,
+      productimageName: req.body.productimageName,
     };
     Product.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
@@ -219,6 +232,8 @@ const product = {
       }
     });
   },
+
+
 };
 
 module.exports = product;
