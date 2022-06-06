@@ -107,6 +107,10 @@ const routes = {
     vendor.addNewuVendor(req, res);
   },
 
+  "/getAllVendors": (req, res) => {
+    vendor.getAllVendors(req, res)
+  },
+
   "/addVendorImage": (req, res) => {
     vendor.addVendorImage(req, res);
   },
@@ -117,7 +121,9 @@ const routes = {
   "/addCategoryImage": (req, res) => {
     categoryObj.addCategoryImage(req, res);
   },
-
+  "/getAllCategories": (req, res) => {
+    categoryObj.getAllCategories(req, res)
+  },
   "/createVehicle": (req, res) => {
     vehicle.addNewvehicle(req, res);
   },

@@ -43,11 +43,11 @@ const vendor = {
     }
   },
 
-  getCustomer: (req, res) => {
+  getVendor: (req, res) => {
 
     console.log(req.body);
     const data = req.body.data;
-    Customer.find(
+    Vendor.find(
       {
         $or: [
           { firstName: data },
@@ -72,14 +72,14 @@ const vendor = {
     );
   },
 
-  getAllCustomers: (req, res) => {
+  getAllVendors: (req, res) => {
     const pageNo = parseInt(req.query.page);
     const size = parseInt(req.query.limit);
     const skip = size * pageNo;
 
     let count = 0;
 
-    Customer.countDocuments({}, function (err, docCount) {
+    Vendor.countDocuments({}, function (err, docCount) {
       if (err) {
         return handleError(err);
       } //handle possible errors
@@ -88,7 +88,7 @@ const vendor = {
       //and do some other fancy stuff
     });
 
-    Customer.find()
+    Vendor.find()
       // .sort({_id: order})
       .sort({ $natural: -1 })
       .skip(skip)
@@ -100,7 +100,7 @@ const vendor = {
       });
   },
   
-  updateCustomerById: (req, res) => {
+  updateVendorById: (req, res) => {
     const data = {
       email: req.body.email,
       titleName: req.body.titleName,
@@ -117,7 +117,7 @@ const vendor = {
       workPhone: req.body.workPhone,
       cellNumber: req.body.cellNumber,
     };
-    Customer.findByIdAndUpdate(req.body._id, data, (err, doc) => {
+    Vendor.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
         // console.log(user);
 
