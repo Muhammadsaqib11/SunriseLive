@@ -22,6 +22,7 @@ const productSchema = new mongoose.Schema({
   SKU: String,
   Price: String,
   parl: String,
+  status: String,
   location_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Locations",

@@ -7,37 +7,24 @@ const notes = "./public/test.xlsx";
 path.dirname(notes);
 path.basename(notes);
 path.extname(notes);
-const auth = require('../middleware/auth')
 var { nanoid } = require("nanoid");
-
-
-// var workbook = XLSX.readFile(notes);
-// var sheet_name_list = workbook.SheetNames;
-// var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-// console.log(xlData);
-
-// Product.insertMany(xlData)
 
 const product = {
   // addNewcustomer
   addNewProduct: (req, res) => {
-    // const displayName = `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`;
-    // console.log("req", req.body)
     const variants = req.body.variants;
     delete req.body.variants;
-    const ID = nanoid()
-    console.log(ID)
+    const ID = nanoid();
 
     variants.forEach((item, i) => {
-      let Data = { ...req.body, ...item, productName: item.Name , ID:ID };
-      console.log(Data);
+      let Data = { ...req.body, ...item, productName: item.Name, ID: ID };
       const product = new Product(Data);
+
       product.save((err, user) => {
         if (err)
           return res.status(400).json({ error: true, message: err.message });
         if (i === variants.length - 1) {
           if (!err) {
-            // console.log(user);
             res.send([user]);
           }
         }
@@ -47,47 +34,67 @@ const product = {
 
   UpdateProductQuantity: (req, res) => {
     const updatedCost = req.body.updateProduct;
-    console.log(updatedCost)
+
     updatedCost.forEach((item, i) => {
-      Product.findByIdAndUpdate(item._id, { CurrentSHMQuantity: item.quantity }, (err, doc) => {
-        if (err)
+      Product.findByIdAndUpdate(
+        item._id,
+        { CurrentSHMQuantity: item.quantity },
+        (err, doc) => {
+          if (err)
             return res.status(400).json({ error: true, message: err.message });
-      if (i === updatedCost.length - 1) {
-        if (!err) {
-          res.json({ success: true, message:" Update Quantity Successfully" });
+          if (i === updatedCost.length - 1) {
+            if (!err) {
+              res.json({
+                success: true,
+                message: " Update Quantity Successfully",
+              });
+            }
+          }
         }
-      }
-      });
+      );
     });
   },
+
+  getProductByBarcode: (req, res)=>{
+    console.log(req.query)
+    const barcode = req.query.Barcode;
+    Product.findOne({Barcode: barcode})
+      .exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).send(doc)    
+      });
+  },
+
   AddProductQuantity: (req, res) => {
     const AddedQuantity = req.body.addProductQuantity;
-    console.log(AddedQuantity)
+
     AddedQuantity.forEach((item, i) => {
-      Product.findByIdAndUpdate(item._id, { CurrentSHMQuantity: item.quantity }, (err, doc) => {
-        if (err)
+      Product.findByIdAndUpdate(
+        item._id,
+        { CurrentSHMQuantity: item.quantity },
+        (err, doc) => {
+          if (err)
             return res.status(400).json({ error: true, message: err.message });
-      if (i === AddedQuantity.length - 1) {
-        if (!err) {
-          res.json({ success: true, message:" Added Quantity Successfully" });
+          if (i === AddedQuantity.length - 1) {
+            if (!err) {
+              res.json({
+                success: true,
+                message: " Added Quantity Successfully",
+              });
+            }
+          }
         }
-      }
-      });
+      );
     });
   },
 
-
-  AppMiddleWareCheck: (req, res ) => {
-      res.status(200).json("Welcome 🙌 ");
+  AppMiddleWareCheck: (req, res) => {
+    res.status(200).json("Welcome 🙌 ");
   },
 
-
   addProductImage: (req, res) => {
-    // console.log("req", req)
     let mdata = req.files === null ? null : req.files.file.data;
-    console.log(req.files);
-    console.log(req.files.file.mimetype.split("/")[1]);
-    // console.log(mdata)
+
     if (mdata !== null) {
       let buff = new Buffer.from(req.files.file.data, "base64");
 
@@ -98,7 +105,6 @@ const product = {
           if (err) {
             res.send(err);
           } else {
-            console.log("success");
             res.json({ success: true });
           }
         }
@@ -110,11 +116,7 @@ const product = {
   },
 
   bulkUpload: (req, res) => {
-    // console.log("req", req)
     let mdata = req.files === null ? null : req.files.file.data;
-    console.log(req.files);
-    console.log(req.files.file.mimetype.split("/")[1]);
-    // console.log(mdata)
     if (mdata !== null) {
       let buff = new Buffer.from(req.files.file.data, "base64");
 
@@ -127,15 +129,12 @@ const product = {
           var xlData = XLSX.utils.sheet_to_json(
             workbook.Sheets[sheet_name_list[0]]
           );
-          console.log(xlData);
 
           Product.insertMany(xlData, { ordered: false, upsert: true }).catch(
             (err) => {
               console.error(err);
             }
           );
-
-          console.log("success");
           res.json({ success: true });
         }
       });
@@ -148,6 +147,7 @@ const product = {
   getProduct: (req, res) => {
     console.log(req.body);
     const data = req.body.data;
+
     Product.find(
       {
         $or: [
@@ -160,7 +160,6 @@ const product = {
         ],
       },
       (err, data) => {
-        console.log(data);
         if (data.length > 0) {
           res.json({
             success: true,
@@ -174,39 +173,31 @@ const product = {
   },
 
   getAllProducts: async (req, res) => {
-    // console.log(req)
     const pageNo = parseInt(req.query.page);
     const size = parseInt(req.query.limit);
-
     const skip = size * pageNo;
-    // console.log("size", size, skip)
     let count = 0;
 
     await Product.countDocuments({}, function (err, docCount) {
       if (err) {
-        return handleError(err);
+       res.status(400).send(err)
       } //handle possible errors
       // console.log("docCount", docCount);
       count = docCount;
-      //and do some other fancy stuff
     });
 
-    await Product.find()
-      // .sort({_id: order})
+    await Product.find({ status: "active" })
       .sort({ $natural: -1 })
       .skip(skip)
       .limit(size)
       .populate("location_id", "country address state city ")
       .exec((err, doc) => {
-        console.log("doc", count);
         if (err) return res.status(400).send(err);
         res.json({ success: true, doc: doc, totalDoc: count });
-        // console.log(doc);
       });
   },
-  updateProductById: (req, res) => {
-    console.log("req body", req.body);
 
+  updateProductById: (req, res) => {
     const data = {
       ProductName: req.body.ProductName,
       productDescription: req.body.productDescription,
@@ -224,16 +215,30 @@ const product = {
       CurrentSHMQuantity: req.body.variants[0].CurrentSHMQuantity,
       productimageName: req.body.productimageName,
     };
+
     Product.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
-        // console.log(user);
-
         res.json({ success: true });
       }
     });
   },
 
+  deleteProduct: async (req, res) => {
+    let ids = req.body.ids;
+    let status = "archive";
 
+    Product.updateMany(
+      { _id: { $in: ids } },
+      { $set: { status } },
+      { multi: true },
+      function (err, records) {
+        if (err) {
+          return false;
+        }
+        res.json({ success: true });
+      }
+    );
+  },
 };
 
 module.exports = product;

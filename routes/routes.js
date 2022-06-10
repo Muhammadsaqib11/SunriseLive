@@ -1,6 +1,8 @@
 var express = require("express");
 const user = require("../controller/user");
-const auth = require('../middleware/auth')
+const auth = require("../middleware/auth");
+const multer = require("multer");
+const upload = multer();
 
 const locations = require("../controller/locations_controller");
 const schedule = require("../controller/schedule_controller");
@@ -28,17 +30,7 @@ const inventory = require("../controller/inventory_controller");
 // const aaVehiclesParts = require("../controller/aaVehiclesparts_controller");
 const vendor = require("../controller/vendor_controller");
 const product = require("../controller/product_controller");
-
 const categoryObj = require("../controller/category_controller");
-
-const axios = require("axios");
-// const upload = require("../helper/helper");
-const multer = require("multer");
-const { promisify } = require("util");
-const pipeline = promisify(require("stream").pipeline);
-const upload = multer();
-
-const fs = require("fs");
 const part_list = require("../controller/partList_controller");
 const warehouse = require("../controller/warehouse_controller");
 const racks = require("../controller/racks_controller");
@@ -49,8 +41,8 @@ const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller
 const orders = require("../controller/getOrdersList_Controller");
 const products = require("../controller/product_controller");
 
-// const CompanyInfo = require("../models/company-info-");
 var router = express.Router();
+
 const routes = {
   "/register": (req, res) => {
     user.register(req, res);
@@ -82,6 +74,8 @@ const routes = {
   "/updateStatus": (req, res) => {
     user.updateStatus(req, res);
   },
+
+  // schedule
   "/createSchedule": (req, res) => {
     schedule.addNewschedule(req, res);
   },
@@ -91,6 +85,8 @@ const routes = {
   "/scheduleUpdate": (req, res) => {
     schedule.scheduleUpdate(req, res);
   },
+
+  // customer
   "/createCustomer": (req, res) => {
     customer.addNewcustomer(req, res);
   },
@@ -103,18 +99,19 @@ const routes = {
   "/getAllCustomers": (req, res) => {
     customer.getAllCustomers(req, res);
   },
+
+  // vendor
   "/createVendor": (req, res) => {
     vendor.addNewuVendor(req, res);
   },
-
   "/getAllVendors": (req, res) => {
-    vendor.getAllVendors(req, res)
+    vendor.getAllVendors(req, res);
   },
-
   "/addVendorImage": (req, res) => {
     vendor.addVendorImage(req, res);
   },
 
+  // category
   "/createCategory": (req, res) => {
     categoryObj.addNewCategory(req, res);
   },
@@ -122,8 +119,10 @@ const routes = {
     categoryObj.addCategoryImage(req, res);
   },
   "/getAllCategories": (req, res) => {
-    categoryObj.getAllCategories(req, res)
+    categoryObj.getAllCategories(req, res);
   },
+
+  // vehicle
   "/createVehicle": (req, res) => {
     vehicle.addNewvehicle(req, res);
   },
@@ -151,6 +150,7 @@ const routes = {
   "/getCustomerVehicle": (req, res) => {
     vehicle.getCustomerVehicles(req, res);
   },
+
   // using vehicle collection to get the cabinets data.....
   "/getAllRooms": (req, res) => {
     vehicle.getAllRooms(req, res);
@@ -206,6 +206,11 @@ const routes = {
   "/deleteAAPartImage": (req, res) => {
     aaVehiclesParts.deleteAAPartImage(req, res);
   },
+
+  // products
+  "/getProductByBarcode": (req, res) => {
+    products.getProductByBarcode(req, res);
+  },
   "/addProductImage": (req, res) => {
     products.addProductImage(req, res);
   },
@@ -218,11 +223,9 @@ const routes = {
   "/AddProductQuantity": (req, res) => {
     products.AddProductQuantity(req, res);
   },
-  "/AppMiddleWareCheck": (req, res ) => {
+  "/AppMiddleWareCheck": (req, res) => {
     products.AppMiddleWareCheck(req, res);
   },
-
-
   "/bulkUpload": (req, res) => {
     products.bulkUpload(req, res);
   },
@@ -232,6 +235,11 @@ const routes = {
   "/updateProductById": (req, res) => {
     products.updateProductById(req, res);
   },
+  "/deleteProduct": (req, res) => {
+    products.deleteProduct(req, res);
+  },
+
+  // orders
   "/getOrdersList": (req, res) => {
     orders.GetOrders(req, res);
   },
@@ -244,6 +252,8 @@ const routes = {
   "/UpdateOrderbyID": (req, res) => {
     orders.UpdateOrder(req, res);
   },
+
+  // employee
   "/createEmployee": (req, res) => {
     employee.addNewEmployee(req, res);
   },
@@ -259,12 +269,16 @@ const routes = {
   "/getEmployeeById": (req, res) => {
     employee.getEmployeeById(req, res);
   },
+
+  // contractor
   "/createContractor": (req, res) => {
     contractor.addNewContractor(req, res);
   },
   "/getAllContractor": (req, res) => {
     contractor.getAllContractor(req, res);
   },
+
+  //  laborRate
   "/createLaborRate": (req, res) => {
     laborRate.addNewLaborRate(req, res);
   },
@@ -274,18 +288,24 @@ const routes = {
   "/getLaborRateByLocationId": (req, res) => {
     laborRate.getLaborRateByLocationId(req, res);
   },
+
+  // partPrice
   "/createPartPrice": (req, res) => {
     partPrice.addNewPartPrice(req, res);
   },
   "/getPartPrice": (req, res) => {
     partPrice.getAllPartPrice(req, res);
   },
+
+  // companyInformation
   "/createCompanyInformation": (req, res) => {
     companyInformation.addNewCompanyInfo(req, res);
   },
   "/getCompanyInformation": (req, res) => {
     companyInformation.getAllCompanyInfo(req, res);
   },
+
+  //  supplier
   "/createSupplier": (req, res) => {
     supplier.addNewsupplier(req, res);
   },
@@ -333,6 +353,8 @@ const routes = {
   "/getAuthorizedUserBanks": (req, res) => {
     authorizedUserBanks.getAuthorizedUserBanks(req, res);
   },
+
+  // workOrder
   "/createWorkOrder": (req, res) => {
     workOrder.addNewWorkOrder(req, res);
   },
@@ -371,8 +393,9 @@ const routes = {
   },
   "/searchWorkOrderByLicensePlateNumber": (req, res) => {
     workOrder.searchWorkOrderByLicensePlateNumber(req, res);
-    // console.log(req.body);
   },
+
+  // check
   "/checkStatusVerified": (req, res) => {
     check.checkStatusVerified(req, res);
   },
@@ -396,6 +419,7 @@ const routes = {
     checks.getGeneratedCheckByCheckType(req, res);
   },
 
+  // inspectionCategory
   "/addInspectionCategory": (req, res) => {
     inspectionCategory.addInspectionCategory(req, res);
   },
@@ -408,6 +432,7 @@ const routes = {
   "/getAllInspectionQuestions": (req, res) => {
     inspectionQuestion.getAllInspectionQuestions(req, res);
   },
+
   // Inspections Tests ...................###########..................
   "/addInspectionTest": (req, res) => {
     inspectionTest.addInspectionTest(req, res);
@@ -451,6 +476,7 @@ const routes = {
   "/updateInspectionResult": (req, res) => {
     inspectionResults.updateInspectionResult(req, res);
   },
+
   // vehicle parts............
   "/addVehiclePart": (req, res) => {
     vehiclePart.addVehiclePart(req, res);
@@ -487,6 +513,7 @@ const routes = {
   "/getAllWarehouseData": (req, res) => {
     warehouse.getAllWarehouseData(req, res);
   },
+
   //RAcks .............
   "/addNewRack": (req, res) => {
     racks.addNewRack(req, res);
@@ -497,6 +524,7 @@ const routes = {
   "/getRacksByWhId": (req, res) => {
     racks.getRacksByWhId(req, res);
   },
+
   // Shelfs ................
   "/addNewShelfs": (req, res) => {
     shelfs.addNewShelfs(req, res);
@@ -507,6 +535,7 @@ const routes = {
   "/getShelfsByRackId": (req, res) => {
     shelfs.getShelfsByRackId(req, res);
   },
+
   // Bins ................
   "/addNewBins": (req, res) => {
     bins.addNewBins(req, res);
@@ -517,6 +546,7 @@ const routes = {
   "/getBinsByShelfId": (req, res) => {
     bins.getBinsByShelfId(req, res);
   },
+
   // Sub-Bins ................
   "/addNewSubBins": (req, res) => {
     subBins.addNewSubBins(req, res);
@@ -524,7 +554,6 @@ const routes = {
   "/getAllSubBins": (req, res) => {
     subBins.getAllSubBins(req, res);
   },
-
   "/getSearchedSubBins": (req, res) => {
     subBins.getSearchedSubBins(req, res);
   },
@@ -555,13 +584,14 @@ const routes = {
   "/test": (req, res) => {},
 };
 
-  router.use("/", auth,( req, res)=> {
-    if (routes[req.path] == undefined) {
-      console.log(req.path);
-    } else {
-      const path = req.path;  
-      routes[path](req, res);
-    }
-  });
+// router config
+router.use("/", auth, (req, res) => {
+  if (routes[req.path] == undefined) {
+    console.log(req.path);
+  } else {
+    const path = req.path;
+    routes[path](req, res);
+  }
+});
 
 module.exports = router;
