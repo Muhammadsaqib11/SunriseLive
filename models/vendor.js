@@ -1,11 +1,11 @@
 const mongoose = require("../config/config");
 
 const vendorSchema = new mongoose.Schema({
-    vendorName: String,
-    vendorDescription: String,
+    name: String,
+    description: String,
     contactName: String,
     phone: String,
-    email: String,
+    contactEmail: String,
     contactfax: String,
     orderEmail: String,
     orderFax: String,
@@ -13,8 +13,9 @@ const vendorSchema = new mongoose.Schema({
     averegeShippingDaysFromVendor: String,
     address: String,
     website: String,
-    contactfax: String,
-    orderEmail: String,
+    weightValue: String,
+    weightUnit: String,
+    notes: String,
     vengorImage:String,
     time_tracks: Array
 });

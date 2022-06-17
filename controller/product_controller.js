@@ -12,12 +12,13 @@ var { nanoid } = require("nanoid");
 const product = {
   // addNewcustomer
   addNewProduct: (req, res) => {
+    console.log("body", req.body )
     const variants = req.body.variants;
-    delete req.body.variants;
-    const ID = nanoid();
+    // delete req.body.variants;
+    const id = nanoid();
 
     variants.forEach((item, i) => {
-      let Data = { ...req.body, ...item, productName: item.Name, ID: ID };
+      let Data = { ...req.body, ...item, name: item.name, id: id };
       const product = new Product(Data);
 
       product.save((err, user) => {
@@ -38,7 +39,7 @@ const product = {
     updatedCost.forEach((item, i) => {
       Product.findByIdAndUpdate(
         item._id,
-        { CurrentSHMQuantity: item.quantity },
+        { quantity: item.quantity },
         (err, doc) => {
           if (err)
             return res.status(400).json({ error: true, message: err.message });
@@ -57,8 +58,8 @@ const product = {
 
   getProductByBarcode: (req, res)=>{
     console.log(req.query)
-    const barcode = req.query.Barcode;
-    Product.findOne({Barcode: barcode})
+    const barcode = req.query.barcode;
+    Product.findOne({barcode: barcode})
       .exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.status(200).send(doc)    
@@ -71,7 +72,7 @@ const product = {
     AddedQuantity.forEach((item, i) => {
       Product.findByIdAndUpdate(
         item._id,
-        { CurrentSHMQuantity: item.quantity },
+        { quantity: item.quantity },
         (err, doc) => {
           if (err)
             return res.status(400).json({ error: true, message: err.message });
@@ -129,6 +130,7 @@ const product = {
           var xlData = XLSX.utils.sheet_to_json(
             workbook.Sheets[sheet_name_list[0]]
           );
+          console.log(xlData);
 
           Product.insertMany(xlData, { ordered: false, upsert: true }).catch(
             (err) => {
@@ -198,23 +200,25 @@ const product = {
   },
 
   updateProductById: (req, res) => {
+    console.log("id", req.body)
     const data = {
-      ProductName: req.body.ProductName,
-      productDescription: req.body.productDescription,
+      name: req.body.name,
+      description: req.body.description,
       category: req.body.category,
       width: req.body.width,
       length: req.body.length,
       height: req.body.height,
       unit: req.body.unit,
       weightValue: req.body.weightValue,
-      SKU: req.body.variants[0].SKU,
-      Barcode: req.body.variants[0].Barcode,
-      Price: req.body.variants[0].Price,
-      CurrentSHMDefaultCost: req.body.variants[0].CurrentSHMDefaultCost,
+      sku: req.body.variants[0].sku,
+      barcode: req.body.variants[0].barcode,
+      price: req.body.variants[0].price,
+      cost: req.body.variants[0].cost,
       parl: req.body.variants[0].parl,
-      CurrentSHMQuantity: req.body.variants[0].CurrentSHMQuantity,
-      productimageName: req.body.productimageName,
+      quantity: req.body.variants[0].quantity,
+      imageName: req.body.imageName,
     };
+    console.log("data", data)
 
     Product.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {

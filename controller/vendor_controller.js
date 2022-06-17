@@ -102,26 +102,26 @@ const vendor = {
   
   updateVendorById: (req, res) => {
     const data = {
-      email: req.body.email,
-      titleName: req.body.titleName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      displayName: `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`,
-      country: req.body.country,
-      state: req.body.state,
-      city: req.body.city,
-      county: req.body.county,
-      street: req.body.street,
-      zipCode: req.body.zipCode,
-      homePhone: req.body.homePhone,
-      workPhone: req.body.workPhone,
-      cellNumber: req.body.cellNumber,
+      name: req.body.name,
+      description: req.body.description,
+      contactName: req.body.contactName,
+      phone: req.body.phone,
+      contactEmail: req.body.contactEmail,
+      orderEmail: req.body.orderEmail,
+      orderFax: req.body.orderFax,
+      vendorAverageFullfillmentDays: req.body.vendorAverageFullfillmentDays,
+      averegeShippingDaysFromVendor: req.body.averegeShippingDaysFromVendor,
+      address: req.body.address,
+      website: req.body.website,
+      notes: req.body.notes,
+      weightValue: req.body.weightValue,
+      weightUnit: req.body.weightUnit,
+      vengorImage:req.body.vendorImage
     };
     Vendor.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
-        // console.log(user);
 
-        res.json({ success: true });
+        res.json({ success: true , message:'Successfully Update Vendor'});
       }
     });
   },

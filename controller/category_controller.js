@@ -103,26 +103,17 @@ const categoryObj = {
   
   updateCategoryById: (req, res) => {
     const data = {
-      email: req.body.email,
-      titleName: req.body.titleName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      displayName: `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`,
-      country: req.body.country,
-      state: req.body.state,
-      city: req.body.city,
-      county: req.body.county,
-      street: req.body.street,
-      zipCode: req.body.zipCode,
-      homePhone: req.body.homePhone,
-      workPhone: req.body.workPhone,
-      cellNumber: req.body.cellNumber,
+      name: req.body.name,
+      description: req.body.description,
+      parentCategory: req.body.parentCategory,
+      image: req.body.image,
+
     };
-    Customer.findByIdAndUpdate(req.body._id, data, (err, doc) => {
+    Category.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
         // console.log(user);
 
-        res.json({ success: true });
+        res.json({ success: true, message :"Category Updated Successfully" });
       }
     });
   },
