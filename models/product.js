@@ -23,10 +23,15 @@ const productSchema = new mongoose.Schema({
   price: String,
   parl: String,
   status: String,
+  parantCode: { type : String },
   location_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Locations",
   },
+  vendor_id: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Vendor",
+  }],
 });
 
 const Product = mongoose.model("Product", productSchema);

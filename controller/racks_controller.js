@@ -25,7 +25,9 @@ const racks = {
           { $group: { _id: null, num: { $max: "$no" } } },
           { $project: { _id: 0, num: 1 } },
         ]).exec(function (error, doc) {
-          if (error) return res.status(400).json({ error: error.message });
+          if(error) return res.status(400).json(
+          { error: error.message }
+          );
           const count = doc[0].num;
           let no = count;
 

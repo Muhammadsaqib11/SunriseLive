@@ -216,7 +216,6 @@ const routes = {
   "/deleteAAPartImage": (req, res) => {
     aaVehiclesParts.deleteAAPartImage(req, res);
   },
-
   // products
   "/getProductByBarcode": (req, res) => {
     products.getProductByBarcode(req, res);
@@ -248,6 +247,16 @@ const routes = {
   "/deleteProduct": (req, res) => {
     products.deleteProduct(req, res);
   },
+  "/getVariantsByProductID": (req, res) => {
+    products.getVariantsByProductID(req, res);
+  },
+  "/getVendorByProductID": (req, res) => {
+    products.getVendorByProductID(req, res);
+  },
+
+  
+
+  
 
   // orders
   "/getOrdersList": (req, res) => {

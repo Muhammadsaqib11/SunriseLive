@@ -12,21 +12,25 @@ var { nanoid } = require("nanoid");
 const product = {
   // addNewcustomer
   addNewProduct: (req, res) => {
-    console.log("body", req.body )
+    // console.log(req.body)
     const variants = req.body.variants;
     // delete req.body.variants;
     const id = nanoid();
+  
+
+
 
     variants.forEach((item, i) => {
-      let Data = { ...req.body, ...item, name: item.name, id: id };
+      const varID = nanoid();
+      let Data = { ...req.body, ...item, name: item.name, id: varID };
+      console.log("Data", Data)
       const product = new Product(Data);
-
       product.save((err, user) => {
         if (err)
           return res.status(400).json({ error: true, message: err.message });
         if (i === variants.length - 1) {
           if (!err) {
-            res.send([user]);
+            res.send({success:true,user:[user]});
           }
         }
       });
@@ -35,7 +39,6 @@ const product = {
 
   UpdateProductQuantity: (req, res) => {
     const updatedCost = req.body.updateProduct;
-
     updatedCost.forEach((item, i) => {
       Product.findByIdAndUpdate(
         item._id,
@@ -193,9 +196,28 @@ const product = {
       .skip(skip)
       .limit(size)
       .populate("location_id", "country address state city ")
+      .populate("vendor_id", "name description")
       .exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.json({ success: true, doc: doc, totalDoc: count });
+      });
+  },
+  getVariantsByProductID: async (req, res) => {
+    console.log(req.query)
+    await Product.find({ parantCode: req.query.parantCode })  
+    .populate("vendor_id", "name description")
+      .exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({ success: true, doc: doc });
+      });
+  },
+  getVendorByProductID: async (req, res) => {
+    // console.log(req.body)
+    await Product.find({ _id: req.body._id })  
+    .populate("vendor_id", "name description")
+      .exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+          return res.json({ success: true, doc: doc });
       });
   },
 
