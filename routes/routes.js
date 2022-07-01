@@ -3,7 +3,6 @@ const user = require("../controller/user");
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const upload = multer();
-
 const locations = require("../controller/locations_controller");
 const schedule = require("../controller/schedule_controller");
 const customer = require("../controller/customer_controller");
@@ -102,7 +101,7 @@ const routes = {
 
   // vendor
   "/createVendor": (req, res) => {
-    vendor.addNewuVendor(req, res);
+    vendor.addNewVendor(req, res);
   },
   "/getAllVendors": (req, res) => {
     vendor.getAllVendors(req, res);
@@ -223,9 +222,17 @@ const routes = {
   "/addProductImage": (req, res) => {
     products.addProductImage(req, res);
   },
+  '/deleteProductImage':(req, res)=>{
+    products.deleteProductImage(req, res);
+  },
   "/createProducts": (req, res) => {
     products.addNewProduct(req, res);
   },
+  "/AssignVendorToProduct": (req, res) => {
+    products.AssignVendorToProduct(req, res);
+  },
+
+  
   "/UpdateProductQuantity": (req, res) => {
     products.UpdateProductQuantity(req, res);
   },
@@ -599,7 +606,6 @@ const routes = {
   "/getContentByVehicleId": (req, res) => {
     aaVehiclesMarketing.getContentByVehicleId(req, res);
   },
-
   "/test": (req, res) => {},
 };
 

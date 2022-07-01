@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const vendor = {
     // addNewcustomer
-  addNewuVendor: (req, res) => {
+  addNewVendor: (req, res) => {
     // const displayName = `${req.body.titleName} ${req.body.firstName} ${req.body.lastName}`;
     console.log("req", req.body)
 
@@ -24,15 +24,13 @@ const vendor = {
     // console.log(mdata)
     if (mdata !== null) {
       let buff = new Buffer.from(req.files.file.data, "base64");
-
       fs.writeFile(
-        `public/vendor/${req.files.file.name}`,
+        `public/product/${req.files.file.name}`,
         buff,
         function (err) {
           if (err) {
             res.send(err);
           } else {
-            console.log("success")
             res.json({ success: true });
           }
         }
@@ -44,7 +42,6 @@ const vendor = {
   },
 
   getVendor: (req, res) => {
-
     console.log(req.body);
     const data = req.body.data;
     Vendor.find(
@@ -76,7 +73,6 @@ const vendor = {
     const pageNo = parseInt(req.query.page);
     const size = parseInt(req.query.limit);
     const skip = size * pageNo;
-
     let count = 0;
 
     Vendor.countDocuments({}, function (err, docCount) {
@@ -120,7 +116,6 @@ const vendor = {
     };
     Vendor.findByIdAndUpdate(req.body._id, data, (err, doc) => {
       if (!err) {
-
         res.json({ success: true , message:'Successfully Update Vendor'});
       }
     });

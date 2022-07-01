@@ -1,5 +1,4 @@
 const mongoose = require("../config/config");
-
 const vendorSchema = new mongoose.Schema({
     name: String,
     description: String,

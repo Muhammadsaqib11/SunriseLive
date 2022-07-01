@@ -20,7 +20,6 @@ const aaVehiclesMarketing = {
     // // console.log(mdata)
     if (mdata !== null) {
       let buff = new Buffer.from(req.files.file.data, "base64");
-
       fs.writeFile(
         `public/marketing/${req.files.file.name}${
           req.body.entity === "image" ? ".png" : ".mp4"
@@ -40,7 +39,6 @@ const aaVehiclesMarketing = {
       res.json({ success: false, message: "no image file to Save" });
     }
   },
-
   updateMarketingContent: (req, res) => {
     if (
       req.body._id && (req.body.entity === "images" ||
@@ -65,7 +63,6 @@ const aaVehiclesMarketing = {
       res.json({ message: "Missing Some values" });
     }
   },
-
   deleteMarketingContent: (req, res) => {
     handleDelete(req, res);
   },
@@ -126,7 +123,6 @@ const aaVehiclesMarketing = {
       res.json({ error: "Missing Some Values" });
     }
   },
-
   getAllMarketingContent: (req, res) => {
     AAVehiclesMarketing.find({})
       .populate("vehicle_id")
@@ -140,7 +136,6 @@ const aaVehiclesMarketing = {
 };
 
 module.exports = aaVehiclesMarketing;
-
 const handleDelete = (req, res) => {
   fs.unlink("public/marketing/" + req.body.name, function (err) {
     if (err && err.code == "ENOENT") {
@@ -162,3 +157,6 @@ const handleDelete = (req, res) => {
     }
   });
 };
+
+
+

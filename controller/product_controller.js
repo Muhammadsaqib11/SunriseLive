@@ -16,10 +16,6 @@ const product = {
     const variants = req.body.variants;
     // delete req.body.variants;
     const id = nanoid();
-  
-
-
-
     variants.forEach((item, i) => {
       const varID = nanoid();
       let Data = { ...req.body, ...item, name: item.name, id: varID };
@@ -34,6 +30,29 @@ const product = {
           }
         }
       });
+    });
+  },
+  AssignVendorToProduct: (req, res) => {
+    const Vendors = req.body;
+    console.log(Vendors)
+
+    Vendors.forEach((item, i) => {
+      Product.findByIdAndUpdate(
+        item._id,
+        { vendor_id: item.vendor_id },
+        (err, doc) => {
+          if (err)
+            return res.status(400).json({ error: true, message: err.message });
+          if (i === Vendors.length - 1) {
+            if (!err) {
+              res.json({
+                success: true,
+                message: " Assign Vandor Successfully",
+              });
+            }
+          }
+        }
+      );
     });
   },
 
@@ -98,10 +117,8 @@ const product = {
 
   addProductImage: (req, res) => {
     let mdata = req.files === null ? null : req.files.file.data;
-
     if (mdata !== null) {
       let buff = new Buffer.from(req.files.file.data, "base64");
-
       fs.writeFile(
         `public/product/${req.files.file.name}`,
         buff,
@@ -117,6 +134,10 @@ const product = {
     if (mdata === null) {
       res.json({ success: false, message: "no image file to Save" });
     }
+  },
+
+  deleteProductImage: async (req, res) => {
+    handleDeleteImage(req, res);
   },
 
   bulkUpload: (req, res) => {
@@ -183,7 +204,7 @@ const product = {
     const skip = size * pageNo;
     let count = 0;
 
-    await Product.countDocuments({}, function (err, docCount) {
+    await Product.countDocuments({status: "active"}, function (err, docCount) {
       if (err) {
        res.status(400).send(err)
       } //handle possible errors
@@ -202,6 +223,7 @@ const product = {
         res.json({ success: true, doc: doc, totalDoc: count });
       });
   },
+
   getVariantsByProductID: async (req, res) => {
     console.log(req.query)
     await Product.find({ parantCode: req.query.parantCode })  
@@ -211,6 +233,8 @@ const product = {
         res.json({ success: true, doc: doc });
       });
   },
+
+
   getVendorByProductID: async (req, res) => {
     // console.log(req.body)
     await Product.find({ _id: req.body._id })  
@@ -226,7 +250,7 @@ const product = {
     const data = {
       name: req.body.name,
       description: req.body.description,
-      category: req.body.category,
+      categories: req.body.category,
       width: req.body.width,
       length: req.body.length,
       height: req.body.height,
@@ -268,3 +292,26 @@ const product = {
 };
 
 module.exports = product;
+
+const handleDeleteImage = (req, res) => {
+
+  fs.unlink("public/product/" + req.body.name, function (err) {
+    if (err && err.code == "ENOENT") {
+      // file doens't exist
+      console.info("File doesn't exist, won't remove it.");
+      res
+        .status(404)
+        .json({ err: err, message: "File doesn't exist, won't remove it." });
+      } else if (err) {
+      // other errors, e.g. maybe we don't have enough permission
+      console.error("Error occurred while trying to remove file");
+      res.json({
+        err: err,
+        message: "Error occurred while trying to remove file",
+      });
+    } else {
+      console.info(`removed`);
+      res.json({ err: false, success: true, message: "Success" });
+    }
+  });
+};

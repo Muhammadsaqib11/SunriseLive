@@ -27,7 +27,7 @@ const categoryObj = {
       let buff = new Buffer.from(req.files.file.data, "base64");
 
       fs.writeFile(
-        `public/img/${req.files.file.name}`,
+        `public/product/${req.files.file.name}`,
         buff,
         function (err) {
           if (err) {
