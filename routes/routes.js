@@ -39,6 +39,7 @@ const subBins = require("../controller/subBins_controller");
 const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller");
 const orders = require("../controller/getOrdersList_Controller");
 const products = require("../controller/product_controller");
+const OrderPO = require("../controller/purchaseOrder_controller")
 
 var router = express.Router();
 
@@ -231,6 +232,11 @@ const routes = {
   "/AssignVendorToProduct": (req, res) => {
     products.AssignVendorToProduct(req, res);
   },
+  "/getCategoryByProductid": (req, res) => {
+    products.getCategoryByProductid(req, res);
+  },
+
+  
 
   
   "/UpdateProductQuantity": (req, res) => {
@@ -260,8 +266,11 @@ const routes = {
   "/getVendorByProductID": (req, res) => {
     products.getVendorByProductID(req, res);
   },
+  "/getProductById": (req, res) => {
+    products.getProductById(req, res);
+  },
 
-  
+
 
   
 
@@ -278,6 +287,20 @@ const routes = {
   "/UpdateOrderbyID": (req, res) => {
     orders.UpdateOrder(req, res);
   },
+
+  
+  // Purchase Order
+  "/addNewPurchaseOrder": (req, res) => {
+    OrderPO.addNewPurchaseOrder(req, res);
+  },
+  "/getAllPurchaseOrders": (req, res) => {
+    OrderPO.getAllPurchaseOrders(req, res);
+  },
+
+
+  
+
+  
 
   // employee
   "/createEmployee": (req, res) => {

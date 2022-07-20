@@ -80,14 +80,24 @@ const product = {
 
   getProductByBarcode: (req, res)=>{
     console.log(req.query)
-    const barcode = req.query.barcode;
-    Product.findOne({barcode: barcode})
+    const _id = req.query._id;
+    Product.findOne({_id: _id})
       .exec((err, doc) => {
         if (err) return res.status(400).send(err);
         res.status(200).send(doc)    
       });
   },
-
+  getCategoryByProductid: (req, res)=>{
+    // console.log(req.query)
+    const id = req.query._id;
+    Product.findOne({_id: id})
+    .populate("categories", "name description parentCategory ")
+      .exec((err, doc) => {
+        console.log(doc)
+        if (err) return res.status(400).send(err);
+        res.status(200).send({success:true, doc})    
+      });
+  },
   AddProductQuantity: (req, res) => {
     const AddedQuantity = req.body.addProductQuantity;
 
@@ -110,11 +120,9 @@ const product = {
       );
     });
   },
-
   AppMiddleWareCheck: (req, res) => {
     res.status(200).json("Welcome 🙌 ");
   },
-
   addProductImage: (req, res) => {
     let mdata = req.files === null ? null : req.files.file.data;
     if (mdata !== null) {
@@ -135,11 +143,9 @@ const product = {
       res.json({ success: false, message: "no image file to Save" });
     }
   },
-
   deleteProductImage: async (req, res) => {
     handleDeleteImage(req, res);
   },
-
   bulkUpload: (req, res) => {
     let mdata = req.files === null ? null : req.files.file.data;
     if (mdata !== null) {
@@ -169,7 +175,6 @@ const product = {
       res.json({ success: false, message: "no image file to Save" });
     }
   },
-
   getProduct: (req, res) => {
     console.log(req.body);
     const data = req.body.data;
@@ -223,7 +228,6 @@ const product = {
         res.json({ success: true, doc: doc, totalDoc: count });
       });
   },
-
   getVariantsByProductID: async (req, res) => {
     console.log(req.query)
     await Product.find({ parantCode: req.query.parantCode })  
@@ -233,12 +237,17 @@ const product = {
         res.json({ success: true, doc: doc });
       });
   },
-
-
   getVendorByProductID: async (req, res) => {
     // console.log(req.body)
     await Product.find({ _id: req.body._id })  
     .populate("vendor_id", "name description")
+      .exec((err, doc) => {
+        if (err) return res.status(400).send(err);
+          return res.json({ success: true, doc: doc });
+      });
+  },
+  getProductById: async (req, res) => {
+    await Product.find({ _id: req.query._id })
       .exec((err, doc) => {
         if (err) return res.status(400).send(err);
           return res.json({ success: true, doc: doc });

@@ -12,7 +12,7 @@ const categoryObj = {
     category.save((err, user) => {
       if (!err) {
         // console.log("user", user);
-        res.send([user]);
+        res.send({success:true , message:'Category Created Successfully'});
       }
     });
   },

@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Vendor",
   }],
-  category: [{
+  categories: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   }],
