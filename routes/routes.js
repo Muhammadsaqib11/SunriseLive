@@ -88,6 +88,7 @@ const routes = {
   },
 
   // customer
+  
   "/createCustomer": (req, res) => {
     customer.addNewcustomer(req, res);
   },
