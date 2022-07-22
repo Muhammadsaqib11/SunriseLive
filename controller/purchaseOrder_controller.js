@@ -1,4 +1,6 @@
 const PurchaseOrder = require("../models/purchaseOrder");
+const PurchaseOrderNumber = require("../models/purchaseOrderNumber");
+
 const mongoose = require("mongoose");
 var XLSX = require("xlsx");
 const fs = require("fs");
@@ -11,7 +13,7 @@ var { nanoid } = require("nanoid");
 
 const OrderPO = {
   // addNewcustomer
-  addNewPurchaseOrder: (req, res) => {
+  addNewPurchaseOrder: async (req, res) => {
     // console.log(req.body)
     const purchaseOrderNumber = req.body.purchaseOrder.orderNumber;
     const purchaseOrderDate = req.body.purchaseOrder.date;
@@ -23,37 +25,61 @@ const OrderPO = {
 
     const PO = req.body.vendorData;
 
-    const id = nanoid();
-    PO.forEach((item, i) => {
-      const varID = nanoid();
-      let Data = { ...item, 
-        vendor_id:item._id, 
-        orderNumber: purchaseOrderNumber ,
-        date:purchaseOrderDate,
-        expectedDate:purchaseOrderexpectedDate,
-        fee:purchaseOrderFee,
-        discount:purchaseOrderDiscount,
-        billTo:purchaseOrderbillTo,
-        shipTo:purchaseOrderShipTo,
-        status:"Overdue"
-       };
-       delete Data._id;
-        console.log("Data", Data)
-      const PurOrder = new PurchaseOrder(Data);
-      PurOrder.save((err, user) => {
-        if (err)
-          return res.status(400).json({ error: true, message: err.message });
-        if (i === PO.length - 1) {
-          if (!err) {
-            res.send({success:true,user:[user]});
+// get order no.............
+
+let orderNo =await PurchaseOrderNumber.findOne()
+if(orderNo){
+  let poNumber = orderNo.orderNumber
+  console.log("poNumber", poNumber)
+
+  console.log("orderNo", orderNo) 
+      const id = nanoid();
+      PO.forEach( (item, i) => {
+        poNumber=poNumber+1
+        console.log("poNumber", poNumber)
+        const varID = nanoid();
+        let Data = { ...item, 
+          vendor_id:item._id, 
+          orderNumber: poNumber ,
+          date:purchaseOrderDate,
+          expectedDate:purchaseOrderexpectedDate,
+          fee:purchaseOrderFee,
+          discount:purchaseOrderDiscount,
+          billTo:purchaseOrderbillTo,
+          shipTo:purchaseOrderShipTo,
+          status:"Overdue"
+         };
+         delete Data._id;
+          // console.log("Data", Data)
+        const PurOrder = new PurchaseOrder(Data);
+        PurOrder.save(async (err, user) => {
+  
+          if (err)
+            return res.status(400).json({ error: true, message: err.message });
+          if (i === PO.length - 1) {
+
+            if (!err) {
+            let a = await  PurchaseOrderNumber.findByIdAndUpdate({_id:orderNo._id},{orderNumber:poNumber},{new:true})
+          console.log("Data", a)
+
+              res.send({success:true,user:[user]});
+            }
           }
-        }
+        });
       });
-    });
+}
+
   },
 
-
-
+  getlastPurchaseOrder:async (req , res)=>{
+    await PurchaseOrderNumber.findOne({})
+      .exec((err, doc) => {
+        console.log("doc", )
+        // let orderNumber = doc[0].orderNumber
+        if (err) return res.status(400).send(err);
+          return res.json({ success: true, doc: doc});
+      }); 
+  },
 
   getAllPurchaseOrders: async (req, res) => {
     const pageNo = parseInt(req.query.page);

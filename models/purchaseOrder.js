@@ -22,6 +22,10 @@ const purchaseOrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },  
+    PurchaseOrderNumber: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PurchaseOrderNumber",
+    }, 
     company: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "CompanyInfo",

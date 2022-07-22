@@ -40,6 +40,7 @@ const aaVehiclesMarketing = require("../controller/aaVehicleMarketing_controller
 const orders = require("../controller/getOrdersList_Controller");
 const products = require("../controller/product_controller");
 const OrderPO = require("../controller/purchaseOrder_controller")
+const OrderPONumber = require("../controller/purchaseOrderNumber_controller")
 
 var router = express.Router();
 
@@ -293,6 +294,16 @@ const routes = {
   "/addNewPurchaseOrder": (req, res) => {
     OrderPO.addNewPurchaseOrder(req, res);
   },
+  "/getlastPurchaseOrder": (req, res) => {
+    OrderPO.getlastPurchaseOrder(req, res);
+  },
+  "/addNewPurchaseOrderNumber": (req, res) => {
+    OrderPONumber.addNewPurchaseOrderNumber(req, res);
+  },
+
+  
+
+  
   "/getAllPurchaseOrders": (req, res) => {
     OrderPO.getAllPurchaseOrders(req, res);
   },
