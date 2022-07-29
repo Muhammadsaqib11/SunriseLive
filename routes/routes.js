@@ -88,7 +88,6 @@ const routes = {
   },
 
   // customer
-  
   "/createCustomer": (req, res) => {
     customer.addNewcustomer(req, res);
   },
@@ -301,6 +300,16 @@ const routes = {
   "/addNewPurchaseOrderNumber": (req, res) => {
     OrderPONumber.addNewPurchaseOrderNumber(req, res);
   },
+  "/getPurchaseOrderById": (req, res) => {
+    OrderPO.getPurchaseOrderById(req, res);
+  },
+  "/UpdatePurchaseOrdderByid": (req, res) => {
+    OrderPO.UpdatePurchaseOrdderByid(req, res);
+  },
+
+  
+
+  
 
   
 

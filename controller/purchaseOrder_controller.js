@@ -95,12 +95,44 @@ if(orderNo){
       });
   },
 
-  getProductById: async (req, res) => {
-    await Product.find({ _id: req.query._id })
+  getPurchaseOrderById: async (req, res) => {
+    console.log(req.query)
+    const id = req.query._id;
+    PurchaseOrder.findOne({_id: id})
+    .populate("vendor_id", "name description contactName phone orderEmail orderEmail ")
       .exec((err, doc) => {
+        console.log(doc)
         if (err) return res.status(400).send(err);
-          return res.json({ success: true, doc: doc });
+        res.status(200).send({success:true, doc:[doc]})    
       });
+  },
+  UpdatePurchaseOrdderByid: (req, res) => {
+    
+    const pOrder = req.body.products;
+    console.log(pOrder)
+          PurchaseOrder.findByIdAndUpdate(req.body._id, {products:pOrder}, (err, doc) => {
+        if (err)
+        return res.status(400).json({ error: true, message: err.message });
+      res.status(200).json({success:true, message:'updates Successfully'})
+
+      });
+    
+    // const id = nanoid();
+    // pOrder.forEach((item, i) => {
+    //   let Data = {  products: item };
+    //   delete Data.products._id;
+    //   console.log(Data)
+    //   PurchaseOrder.findByIdAndUpdate(item._id, Data, (err, doc) => {
+    //     if (err)
+    //     return res.status(400).json({ error: true, message: err.message });
+    //   if (i === pOrder.length - 1) {
+    //     if (!err) {
+    //       res.send({success:true,message:'Purchase Order Updated', doc:doc});
+    //     }
+    //   }
+    //   });
+
+    // });
   },
 
   updateProductById: (req, res) => {
